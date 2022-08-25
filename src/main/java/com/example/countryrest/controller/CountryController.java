@@ -2,6 +2,12 @@ package com.example.countryrest.controller;
 
 import com.example.countryrest.entity.Country;
 import com.example.countryrest.service.CountryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +27,26 @@ public class CountryController {
         this.service = service;
     }
 
+
+    @Operation(method = "GET", description = "Get all countries.", tags = "users")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Users not found"
+            ),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Found the countries.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Country.class))
+                    )
+            )
+    })
     @GetMapping
     public ResponseEntity<List<Country>> getAll() {
         Collection<Country> countries = service.getAll();
-        if(countries.isEmpty()){
+        if (countries.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ArrayList<>(countries), HttpStatus.OK);
@@ -33,7 +55,7 @@ public class CountryController {
     @GetMapping("/name/{name}")
     public ResponseEntity<Country> getByName(@PathVariable String name) {
         Country country = service.findCountry(name);
-        if(country == null){
+        if (country == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(country, HttpStatus.NOT_FOUND);
@@ -43,7 +65,7 @@ public class CountryController {
     @GetMapping("/{id}")
     public ResponseEntity<Country> findCountry(@PathVariable int id) {
         Optional<Country> countryOptional = service.getById(id);
-        if(countryOptional.isEmpty()){
+        if (countryOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(countryOptional.get(), HttpStatus.OK);
@@ -61,7 +83,7 @@ public class CountryController {
                                           @RequestBody Country country) {
 
         Optional<Country> dbCountryOptional = service.getById(id);
-        if(dbCountryOptional.isEmpty()){
+        if (dbCountryOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Country dbCountry = dbCountryOptional.get();
@@ -76,7 +98,7 @@ public class CountryController {
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable int id) {
         Optional<Country> dbCountryOptional = service.getById(id);
-        if(dbCountryOptional.isEmpty()){
+        if (dbCountryOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         service.delete(dbCountryOptional.get());
