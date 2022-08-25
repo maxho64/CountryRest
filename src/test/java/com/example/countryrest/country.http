@@ -1,0 +1,44 @@
+###
+GET {{url}}/country
+Content-Type: application/json
+
+###
+GET {{url}}/country/name/Spain
+Content-Type: application/json
+
+###
+GET {{url}}/country/1
+Content-Type: application/json
+
+###
+POST {{url}}/country
+Content-Type: application/json
+
+{
+  "name": "Germany",
+  "currency": "EUR",
+  "capital": "Berlin",
+  "population": 83019213
+}
+
+> {%
+    client.global.set("id", response.body.id);
+%}
+
+###
+PUT {{url}}/country/{{id}}
+Content-Type: application/json
+
+{
+  "name": "Germany",
+  "currency": "EUR",
+  "capital": "Berlin",
+  "population": 83019213
+}
+
+###
+DELETE {{url}}/country/{{id}}
+Content-Type: application/json
+
+
+
