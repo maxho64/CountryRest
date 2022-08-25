@@ -5,6 +5,7 @@ import com.example.countryrest.repository.CountryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class CountryService {
@@ -31,11 +32,11 @@ public class CountryService {
         return repository.getAll();
     }
 
-    public Country getById(int id){
+    public Optional<Country> getById(int id){
         return repository.getById(id);
     }
 
-    public void delete(int id){
-        repository.delete(id);
+    public void delete(Country country){
+        repository.delete(country);
     }
 }

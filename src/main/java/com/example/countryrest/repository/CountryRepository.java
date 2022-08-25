@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class CountryRepository {
@@ -63,12 +64,11 @@ public class CountryRepository {
         return countries.values();
     }
 
-    public Country getById(int id){
-        return getAll().stream().filter(c -> c.getId() == id).findFirst().get();
+    public Optional<Country> getById(int id){
+        return getAll().stream().filter(c -> c.getId() == id).findFirst();
     }
 
-    public void delete(int id){
-        Country country = getById(id);
+    public void delete(Country country){
         countries.remove(country.getName());
     }
 }
