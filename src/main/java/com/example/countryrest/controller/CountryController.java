@@ -3,6 +3,7 @@ package com.example.countryrest.controller;
 import com.example.countryrest.entity.Country;
 import com.example.countryrest.service.CountryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,11 +29,11 @@ public class CountryController {
     }
 
 
-    @Operation(method = "GET", description = "Get all countries.", tags = "users")
+    @Operation(method = "GET", description = "Get all countries.", tags = "countries")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "404",
-                    description = "Users not found"
+                    description = "Countries not found"
             ),
             @ApiResponse(
                     responseCode = "200",
@@ -53,7 +54,7 @@ public class CountryController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<Country> getByName(@PathVariable String name) {
+    public ResponseEntity<Country> getByName(@Parameter() @PathVariable String name) {
         Country country = service.findCountry(name);
         if (country == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -80,7 +81,7 @@ public class CountryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Country> update(@PathVariable int id,
-                                          @RequestBody Country country) {
+                                         @RequestBody Country country) {
 
         Optional<Country> dbCountryOptional = service.getById(id);
         if (dbCountryOptional.isEmpty()) {
